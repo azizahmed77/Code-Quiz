@@ -10,6 +10,8 @@ let score = 0
 let questionCounter = 0
 let availableQuestions = []
 
+
+
 let questions = [
     {
         question: 
@@ -59,8 +61,10 @@ let questions = [
     }
 ]
 
-const SCORE_POINTS = 5
-const MAX_QUESTIONS = 4
+
+
+const SCORE_POINTS = 100
+const MAX_QUESTIONS = 5
 
 startGame = () => {
     questionCounter = 0
@@ -70,10 +74,13 @@ startGame = () => {
 }
 
 getNewQuestion = () => {
+
+    
+
     if(availableQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
         localStorage.setItem('mostRecentScore', score)
 
-        return window.location.assign('/end.html')
+        return window.location.assign('endpage.html')
     }
 
     questionCounter++
@@ -94,11 +101,25 @@ getNewQuestion = () => {
     acceptingAnswers = true
 }
 
+var sec = 60;
+var time = setInterval(myTimer, 1000);
+
+function myTimer() {
+    document.getElementById('timer').innerHTML = sec + "sec left";
+    sec--;
+    if (sec == -1) {
+        clearInterval(time);
+        alert("Time out!! :(");
+        return window.location.assign('endpage.html');
+    }
+}
+
 choices.forEach(choice => {
     choice.addEventListener('click', e => {
         if(!acceptingAnswers) return
 
         acceptingAnswers = false
+        sec -=10
         const selectedChoice = e.target
         const selectedAnswer = selectedChoice.dataset['number']
 
@@ -117,6 +138,10 @@ choices.forEach(choice => {
         }, 1000)
     })
 })
+
+
+
+
 
 incrementScore = num => {
     score +=num
