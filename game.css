@@ -3,6 +3,8 @@ body {
 
 }
 
+
+
 .choice-container {
     display: flex;
     margin-bottom: 0.8rem;
@@ -43,13 +45,13 @@ body {
 /* Hud */
 
 #hud {
-    display: flex;
+    display:flex;
     justify-content: space-between;
 }
 
 .hud-prefix {
     text-align: center;
-    font-size: 2rem; 
+    font-size: 1rem; 
 }
 
 .hud-main-text {
@@ -77,3 +79,4 @@ body {
         min-width:40rem;
     }
 
+}
