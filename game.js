@@ -1,151 +1,286 @@
-const question = document.querySelector('#question');
-const choices = Array.from(document.querySelectorAll('.choice-text'));
-const progressText = document.querySelector('#progressText');
-const scoreText = document.querySelector('#score');
-const progressBarFull = document.querySelector('#progressBarFull');
+// GIVEN I am taking a code quiz
+// WHEN I click the start button
+// THEN a timer starts and I am presented with a question
+// WHEN I answer a question
+// THEN I am presented with another question
+// WHEN I answer a question incorrectly
+// THEN time is subtracted from the clock
+// WHEN all questions are answered or the timer reaches 0
+// THEN the game is over
+// WHEN the game is over
+// THEN I can save my initials and score
 
-let currentQuestion = {}
-let acceptingAnswers = true
+const timerEl = document.getElementById('time-left')
+let timeLeft = 80
+
+const start = document.getElementById('start-btn')
+const homePage = document.getElementById('home')
+const quizPage = document.getElementById('quiz-content')
+quizPage.style.display = "none"
+const currentQuestion = document.getElementById('current-question')
+const choiceList = document.getElementById('question-choices')
+const choiceOne = document.getElementById('choice1')
+const choiceTwo = document.getElementById('choice2')
+const choiceThree = document.getElementById('choice3')
+const choiceFour = document.getElementById('choice4')
+const gameoverPage = document.getElementById('game-over')
+gameoverPage.style.display = "none"
+let initials = document.getElementById('initials')
+const scoresPage = document.getElementById('scores-page')
+scoresPage.style.display = "none"
+
+let input = document.getElementById('input')
+const restart = document.getElementById('restart')
+
 let score = 0
-let questionCounter = 0
-let availableQuestions = []
+let allScores = document.getElementById("scores-list")
+//let highScores = []
 
 
+let allQuestions = [
+    {
+        question: "Inside which HTML element do we put the JavaScript?:",
+        choice1: "<js>",
+        choice2: "<script>",
+        choice3: "<link>",
+        choice4: "<h1>",
+        answer: "<script>"
 
-let questions = [
-    {
-        question: 
-        'What is a JavaScript element that represents either TRUE or FALSE values?',
-        choice1: 'Boolean',
-        choice2: 'Event',
-        choice3: 'String',
-        choice4: 'Function',
-        answer: 1,
     },
     {
-        question:
-            "In JavaScript, what element is used to store multiple values in a single variable?",
-        choice1: "Arrays",
-        choice2: "Strings",
-        choice3: "Closing Statement",
-        choice4: "Code Block",
-        answer: 1,
+        question: "Where is the correct place to insert a JavaScript?:",
+        choice1: "The <head> section",
+        choice2: "The <body> section",
+        choice3: "The <header> section",
+        choice4: "All of the above",
+        answer: "The <body> section"
+
     },
     {
-        question:
-         "In JavaScript, what is a block of code called that is used to perform a specific task?",
-        choice1: "String",
-        choice2: "Variable",
-        choice3: "Function",
-        choice4: "Declaration",
-        answer: 3,
+        question: "Arrays in JavaScript can be used to store:",
+        choice1: "Numbers and strings",
+        choice2: "Other arrays",
+        choice3: "Booleans",
+        choice4: "All of the above",
+        answer: "All of the above"
+
     },
     {
-        question:
-         "What is the name of the object that allows you to perform mathematical tasks?",
-        choice1: "Math",
-        choice2: "Count",
-        choice3: "Solve",
-        choice4: "Number",
-        answer: 1,
+        question: "String values must be enclosed within when being assigned to variables:",
+        choice1: "Commas",
+        choice2: "Curly brackets",
+        choice3: "Quotes",
+        choice4: "Parenthesis",
+        answer: "Quotes"
+
     },
     {
-        
-        question:
-         "What is the element called that can continue to execute a block of code as long as the specified condition remains TRUE?",
-        choice1: "Function",
-        choice2: "Loop",
-        choice3: "Repeat",
-        choice4: "Number",
-        answer: 2,
+        question: "Which one has the correct syntax to start an IF statement?",
+        choice1: "for(i=0; i<=5)",
+        choice2: "for(i=0; i<=5;i++)",
+        choice3: "for i = 1 to 5",
+        choice4: "for(i<=5;i++)",
+        answer: "for(i=0; i<=5;i++)"
+
     }
+
+
 ]
 
 
 
-const SCORE_POINTS = 100
-const MAX_QUESTIONS = 5
 
-startGame = () => {
-    questionCounter = 0
-    score = 0
-    availableQuestions = [...questions]
-    getNewQuestion()
-}
 
-getNewQuestion = () => {
-
-    
-
-    if(availableQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
-        localStorage.setItem('mostRecentScore', score)
-
-        return window.location.assign('endpage.html')
+let timer = () => {
+  let countdown = setInterval(function() {
+    if(timeLeft > 1) {
+        timerEl.textContent = timeLeft 
+        timeLeft--
     }
+    else if(timeLeft === 1) {
+        timerEl.textContent = timeLeft
+        timeLeft-- 
+    }
+    else {
+        timerEl.textContent = ''
+        clearInterval(countdown)
+        
+    }
+  }, 1000)
 
-    questionCounter++
-    progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`
-    progressBarFull.style.width = `${(questionCounter/MAX_QUESTIONS) * 100}%`
-    
-    const questionsIndex = Math.floor(Math.random() * availableQuestions.length)
-    currentQuestion = availableQuestions[questionsIndex]
-    question.innerText = currentQuestion.question
-
-    choices.forEach(choice => {
-        const number = choice.dataset['number']
-        choice.innerText = currentQuestion['choice' + number]
-    })
-
-    availableQuestions.splice(questionsIndex, 1)
-
-    acceptingAnswers = true
 }
 
-var sec = 60;
-var time = setInterval(myTimer, 1000);
+let index = 0
 
-function myTimer() {
-    document.getElementById('timer').innerHTML = sec + "sec left";
-    sec--;
-    if (sec == -1) {
-        clearInterval(time);
-        alert("Time out!! :(");
-        return window.location.assign('endpage.html');
+let newQuestion = () => {
+    if(index < allQuestions.length) {
+        currentQuestion.textContent = allQuestions[index].question 
+        choice1.textContent = allQuestions[index].choice1
+        choice2.textContent = allQuestions[index].choice2
+        choice3.textContent = allQuestions[index].choice3
+        choice4.textContent = allQuestions[index].choice4
     }
 }
 
-choices.forEach(choice => {
-    choice.addEventListener('click', e => {
-        if(!acceptingAnswers) return
+let gameOver = () => {
+   
+    quizPage.style.display="none";
+    document.getElementById('header').style.display = "none"
+    gameoverPage.style.display = "block"
+    document.getElementById("score").textContent= 'Your score is:' + score;
+        
+}
 
-        acceptingAnswers = false
-        sec -=10
-        const selectedChoice = e.target
-        const selectedAnswer = selectedChoice.dataset['number']
+choiceOne.addEventListener('click', function(event) {
+    event.stopPropagation();
+    answer = allQuestions[index].answer
+    console.log(event.target.textContent)
+    if(event.target.textContent === answer) {
+        score++
+    }
+    else {
+        timeLeft = timeLeft -10
+    }
+    if(index >= allQuestions.length -1 ) {
+        gameOver()
+    }
+    else {
+    index++
+    newQuestion()
+    }
 
-        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
-
-        if(classToApply === 'correct') {
-            incrementScore(SCORE_POINTS)
-        }
-
-        selectedChoice.parentElement.classList.add(classToApply)
-
-        setTimeout(() => {
-            selectedChoice.parentElement.classList.remove(classToApply)
-            getNewQuestion()
-
-        }, 1000)
-    })
 })
 
+choiceTwo.addEventListener('click', function(event) {
+    event.stopPropagation();
+    answer = allQuestions[index].answer
+    console.log(event.target.textContent)
+    if(event.target.textContent === answer) {
+        score++
+        console.log(score)
+    }
+    else {
+        timeLeft = timeLeft -10
+    }
+    if(index >= allQuestions.length -1 ) {
+        gameOver()
+    }
+    else {
+    index++
+    newQuestion()
+    }
 
+})
 
+choiceThree.addEventListener('click', function(event) {
+    event.stopPropagation();
+    answer = allQuestions[index].answer
+    console.log(event.target.textContent)
+    if(event.target.textContent === answer) {
+        score++
+        
+    }
+    else {
+        timeLeft = timeLeft -10
+    }
+    if(index >= allQuestions.length - 1) {
+        gameOver()
+    }
+    else {
+    index++
+    newQuestion()
+    }
 
+})
 
-incrementScore = num => {
-    score +=num
-    scoreText.innerText = score
+choiceFour.addEventListener('click', function(event) {
+    event.stopPropagation();
+    answer = allQuestions[index].answer
+    console.log(event.target.textContent)
+    if(event.target.textContent === answer) {
+        score++
+        console.log('hello')
+    }
+    else {
+        timeLeft = timeLeft -10
+    }
+    if(index >= allQuestions.length - 1) {
+        gameOver()
+    }
+    else {
+    index++
+    newQuestion()
+    }
+
+})
+
+let submit = (event) => {
+    event.preventDefault()
+    quizPage.style.display="none";
+    document.getElementById('header').style.display = "none"
+    gameoverPage.style.display = "none"
+    scoresPage.style.display = "block"
+    
+    let entry = {
+        name: initials.value,
+        score: score
+    }
+  
+    const highScores = JSON.parse(localStorage.getItem("highScores")) || []
+    highScores.push(entry);
+    localStorage.setItem("highScores", JSON.stringify(highScores))
+
+    
+
+    allScores.innerHTML = ''
+    for(i=0;i<highScores.length;i++) {
+        let newScore = document.createElement('li')
+        newScore.setAttribute("class", "list-group-item bg-info")
+        newScore.textContent = `${highScores[i].name}: ${highScores[i].score}`
+        allScores.appendChild(newScore)
+        
+    }
+  
+    //storeScore()
+    //getScores()
+    
 }
 
-startGame()
+/*let storeScore = () => {
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+
+}
+let getScores = () => {
+    let savedScores = JSON.parse(localStorage.getItem("highScores"))
+
+    if (savedScores !== null) {
+        highScores = savedScores;
+    }
+}*/
+
+
+
+input.addEventListener('submit', submit)
+
+
+
+
+
+
+
+
+let startQuiz = () => {
+    homePage.style.display = "none"
+    quizPage.style.display = "block"
+    timer()
+    newQuestion()
+}
+
+let restartQuiz = () => {
+    scoresPage.style.display = "none"
+    location.reload()
+}
+
+start.addEventListener('click', startQuiz)
+restart.addEventListener('click', restartQuiz)
+

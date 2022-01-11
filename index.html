@@ -3,19 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coding-Quiz</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Code Quiz</title>
 </head>
-<body>
-    <div class="container">
-        <div id="home" class="flex-column flex-center">
-            <h1> Are You Ready?</h1>
-            <a href="game.html" class="btn">Play</a>
-            <a href="highscore.html" id="highscore-btn" class="btn">High Scores</a>
-            
+<body class="bg-info">
+ <main class = " container">
+
+    <header id="header">
+        <h3 id="time-left"> </h3>
+    </header>
+
+    <section class="text-center" id="home">
+        <div>
+            <h1> Welcome to the Javascript Code Quiz!</h1>
+            <P> Answer all the questions as quickly as you can. Wrong answers will cost you time!</P>
         </div>
-    </div>
+        <div>
+            <button id="start-btn" class="btn btn-warning"> Start</button>
+        </div>
+
+    </section>
+
+
+    <section class="text-center" id="quiz-content">
+        <div>
+            <h1 id = "current-question">Test QUESTION</h1>
+            <div id= "question-choices">
+                <div>
+                    <button class="btn-warning" id = "choice1">test choice</button>
+                </div>
+                <div>
+                    <button class="btn-warning" id = "choice2"> test choice 2</button>
+                </div>
+                <div>
+                    <button class="btn-warning" id = "choice3">test choice 3</button>
+                </div>
+                <div>
+                    <button class="btn-warning" id = "choice4">test choice 4</button>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <section class="text-center" id = "game-over">
+        <h1 id = "score"> Score:</h1>
+        <form id="input"> Enter your initials
+            <input type="text" id="initials">
+            <button type="submit" id="submit-score">Submit</button>
+        </form>
+       
+    </section>
+
+    <section class="text-left" id = "scores-page">
+        <ul class="list-group list-group-flush font-weight-bold text-uppercase" id= "scores-list">
+
+        </ul>
+        <div>
+            <button class="btn btn-warning" id="restart"> Try Again?</button>
+        </div>
+    </section>
+
     
+ </main>
+
+    <script src="game.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
